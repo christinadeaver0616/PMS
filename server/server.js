@@ -29,4 +29,9 @@ app.use("/api/comments", protect, commentRouter);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Local/dev: listen. Vercel: export the app as a serverless function.
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+export default app;
