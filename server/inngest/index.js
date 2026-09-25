@@ -53,7 +53,7 @@ const syncWorkspaceCreation = inngest.createFunction({ id: "sync-workspace-from-
             name: data.name,
             slug: data.slug,
             ownerId: data.created_by,
-            image_url: data.image_url,
+            image_url: data.image_url || "",
         },
     });
 
@@ -77,7 +77,7 @@ const syncWorkspaceUpdation = inngest.createFunction({ id: "update-workspace-fro
         data: {
             name: data.name,
             slug: data.slug,
-            image_url: data.image_url,
+            image_url: data.image_url || "",
         },
     });
 });

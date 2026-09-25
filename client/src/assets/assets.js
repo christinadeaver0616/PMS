@@ -1,7 +1,18 @@
-import workspace_img_default from "./workspace_img_default.png";
+import team2 from "./team2.png";
 import profile_img_a from "./profile_img_a.svg";
 import profile_img_o from "./profile_img_o.svg";
 import profile_img_j from "./profile_img_j.svg";
+
+// Default workspace / organization image when none was uploaded
+export const workspace_img_default = team2;
+export const DEFAULT_ORG_IMAGE = team2;
+export { team2 };
+
+/** Use team2 only when there is no image URL at all */
+export function getWorkspaceImage(url) {
+    if (!url || !String(url).trim()) return DEFAULT_ORG_IMAGE;
+    return String(url);
+}
 
 export const dummyUsers = [
     {

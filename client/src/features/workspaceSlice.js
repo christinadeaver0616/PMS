@@ -23,10 +23,16 @@ const workspaceSlice = createSlice({
     reducers: {
         setWorkspaces: (state, action) => {
             state.workspaces = action.payload;
+            if (!action.payload || action.payload.length === 0) {
+                state.currentWorkspace = null;
+            }
         },
         setCurrentWorkspace: (state, action) => {
             localStorage.setItem("currentWorkspaceId", action.payload);
-            state.currentWorkspace = state.workspaces.find((w) => w.id === action.payload);
+            const found = state.workspaces.find((w) => w.id === action.payload);
+            if (found) {
+                state.currentWorkspace = found;
+            }
         },
         addWorkspace: (state, action) => {
             state.workspaces.push(action.payload);
@@ -119,18 +125,22 @@ const workspaceSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchWorkspaces.fulfilled, (state, action) => {
-            state.workspaces = action.payload;
-            if (action.payload.length > 0) {
+            const withDefaultImages = (action.payload || []).map((w) => ({
+                ...w,
+                image_url: w.image_url && String(w.image_url).trim() ? w.image_url : "/team2.png",
+            }));
+            state.workspaces = withDefaultImages;
+            if (withDefaultImages.length > 0) {
                 const localStorageCurrentWorkspaceId = localStorage.getItem("currentWorkspaceId");
                 if (localStorageCurrentWorkspaceId) {
-                    const findWorkspace = action.payload.find((w) => w.id === localStorageCurrentWorkspaceId);
+                    const findWorkspace = withDefaultImages.find((w) => w.id === localStorageCurrentWorkspaceId);
                     if (findWorkspace) {
                         state.currentWorkspace = findWorkspace;
                     } else {
-                        state.currentWorkspace = action.payload[0];
+                        state.currentWorkspace = withDefaultImages[0];
                     }
                 } else {
-                    state.currentWorkspace = action.payload[0];
+                    state.currentWorkspace = withDefaultImages[0];
                 }
             }
             state.loading = false;
