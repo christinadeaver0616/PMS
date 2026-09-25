@@ -1,0 +1,8 @@
+.env
+.env.*
+.env.local
+node_modules
+client/node_modules
+server/node_modules
+DEMO_HELP_NOTES.md
+How to Setup & Run Project.pdf
